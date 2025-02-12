@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Registration</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        input, button { margin: 10px; padding: 8px; font-size: 16px; }
+        .team-member { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Hackathon Team Registration</h2>
+
+    <form id="registrationForm">
+        <h3>Team Leader Details</h3>
+        <input type="text" id="leaderName" placeholder="Leader Name" required><br>
+        <input type="email" id="leaderEmail" placeholder="Leader Email" required><br>
+
+        <h3>Team Details</h3>
+        <input type="text" id="teamName" placeholder="Team Name" required><br>
+        <input type="text" id="projectIdea" placeholder="Project Idea" required><br>
+
+        <h3>Team Members</h3>
+        <div id="teamMembers"></div>
+        <button type="button" onclick="addMember()">+ Add Member</button><br>
+
+        <button type="submit">Register Team</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        let memberCount = 0;
+
+        function addMember() {
+            if (memberCount >= 4) {
+                alert("Maximum 4 members allowed!");
+                return;
+            }
+            memberCount++;
+
+            const memberDiv = document.createElement("div");
+            memberDiv.classList.add("team-member");
+            memberDiv.innerHTML = `
+                <input type="text" placeholder="Member Name" class="memberName" required>
+                <input type="email" placeholder="Member Email" class="memberEmail" required>
+                <button type="button" onclick="removeMember(this)">❌</button>
+            `;
+            document.getElementById("teamMembers").appendChild(memberDiv);
+        }
+
+        function removeMember(button) {
+            button.parentElement.remove();
+            memberCount--;
+        }
+
+        document.getElementById("registrationForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const leaderName = document.getElementById("leaderName").value;
+            const leaderEmail = document.getElementById("leaderEmail").value;
+            const teamName = document.getElementById("teamName").value;
+            const projectIdea = document.getElementById("projectIdea").value;
+
+            const members = [];
+            document.querySelectorAll(".team-member").forEach(member => {
+                members.push({
+                    name: member.querySelector(".memberName").value,
+                    email: member.querySelector(".memberEmail").value
+                });
+            });
+
+            const teamData = { leaderName, leaderEmail, teamName, projectIdea, members };
+
+            const response = await fetch("http://localhost:5000/register-team", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(teamData),
+            });
+
+            const data = await response.json();
+            document.getElementById("message").innerText = data.message;
+        });
+    </script>
+
+</body>
+</html>
