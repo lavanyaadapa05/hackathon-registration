@@ -27,9 +27,10 @@ const Team = mongoose.model("Team", TeamSchema);
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "amughdham@gmail.com",
-        pass: "uaweajcromkupfnr"
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
+    
 });
 
 // 🟢 Register a new team
