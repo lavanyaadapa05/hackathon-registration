@@ -54,7 +54,7 @@ app.post("/register-team", async (req, res) => {
 
     // Send email invitations
     for (const member of members) {
-        const inviteLink = `http://localhost:5000/accept-invite?team=${newTeam._id}&email=${member.email}`;
+        const inviteLink = `https://hackathon-registration-1.onrender.com/accept-invite?team=${newTeam._id}&email=${member.email}`;
         const mailOptions = {
             from: "22b01a0555@svecw.edu.in",
             to: member.email,

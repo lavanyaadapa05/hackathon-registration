@@ -75,7 +75,7 @@
 
             const teamData = { leaderName, leaderEmail, teamName, projectIdea, members };
 
-            const response = await fetch("https://hackathon-registration-1.onrender.com", {
+            const response = await fetch("https://hackathon-registration-1.onrender.com/register-team", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(teamData),
